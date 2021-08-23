@@ -1,7 +1,5 @@
 import React from 'react';
-import Skin from './components/skins/getSkin'
-
-console.log("Skin:", Skin)
+import Skin from './components/Skin'
 
 export const App = () => (
   <Skin />
