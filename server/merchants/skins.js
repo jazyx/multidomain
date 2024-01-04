@@ -12,7 +12,7 @@
  /// <<< HARD-CODED
  let directory = '../../imports/ui/components/skins/'
  let merchant = 'merchant.js'
- /// HARD-CODED >>>
+ /// HARD-CODED >>>
 
 
  const fs = require('fs')
@@ -36,39 +36,50 @@
  
  
   getExports(scripts) {
-    let exports = ""
+    let imports = ""
+    let exports = `
+
+export {`
     let extRegex = /\.jsx$/
+
 
     scripts.forEach( file => {
       const match = extRegex.test(file) // false for merchant.js
 
       if (match) {
        const name = file.replace(extRegex, "")
-       exports += `
-export ${name} from './${file}'`
+       imports += `
+import ${name} from './${file}'`
+
+        exports += `
+  ${name},`
       }
     })
 
-    return exports
+    exports = exports.slice(0,-1) + `
+}
+`
+    return imports + exports
   }
  
  
    getScriptChunk() {
      return `/**
-  * ** DO NOT EDIT THIS SCRIPT **
-  * IT IS GENERATED AUTOMATICALLY
-  * EACH TIME THE SERVER RESTARTS
-  *
-  * MODIFY THIS FILE INSTEAD:
-  * /server/merchants/skins.js
-  * **** **** **** **** **** ****
-  *
-  * This script gathers together details of all the <customDomain>.jsx
-  * scripts found in this '/import/ui/components/skins/' folder.
+  **** DO NOT EDIT THIS SCRIPT ****
+  * IT IS GENERATED AUTOMATICALLY *
+  * EACH TIME THE SERVER RESTARTS *
+  *                               *
+  *   MODIFY THIS FILE INSTEAD:   *
+  *   /server/merchants/skins.js  *
+  * **** **** **** **** **** **** *
+
+  * This script gathers together details of all the
+  * <customDomain>.jsx scripts found in this
+  * '/import/ui/components/skins/' folder.
   * 
   * The classes exported here are imported as 'skins ' by
-  * '/imports/ui/components/Skin.jsx', which then exports the skin which
-  * best matches the hostname of the website.
+  * '/imports/ui/components/Skin.jsx', which then exports the
+  * skin which best matches the hostname of the website.
   */
  `
    }
